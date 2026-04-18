@@ -1,4 +1,4 @@
-# ER-StatRandomizer
+# Elden Ring Randomized Stats
 
 A lightweight C++ DLL middleware for **Elden Ring** that monitors player death events to inject randomized attributes and character levels.
 
