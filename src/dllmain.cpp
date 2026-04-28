@@ -1,7 +1,45 @@
 #include <windows.h>
 #include <thread>
 #include <psapi.h>
-#include "ext/random.h"     
+#include <chrono>
+#include <cstdint>
+
+struct xoshiro256ss_state {
+    uint64_t s[4];
+};
+
+static inline uint64_t rotl(const uint64_t x, int k) {
+    return (x << k) | (x >> (64 - k));
+}
+
+uint64_t next(xoshiro256ss_state* state) {
+    const uint64_t result = rotl(state->s[1] * 5, 7) * 9;
+    const uint64_t t = state->s[1] << 17;
+
+    state->s[2] ^= state->s[0];
+    state->s[3] ^= state->s[1];
+    state->s[1] ^= state->s[2];
+    state->s[0] ^= state->s[3];
+
+    state->s[2] ^= t;
+    state->s[3] = rotl(state->s[3], 45);
+
+    return result;
+}
+
+void seed_rng(xoshiro256ss_state* state, uint64_t seed) {
+    auto splitmix64 = [&](uint64_t& x) {
+        uint64_t z = (x += 0x9e3779b97f4a7c15);
+        z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
+        z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+        return z ^ (z >> 31);
+        };
+    state->s[0] = splitmix64(seed);
+    state->s[1] = splitmix64(seed);
+    state->s[2] = splitmix64(seed);
+    state->s[3] = splitmix64(seed);
+}
+
 
 const char* GAMEDATAMAN_AOB = "\x48\x8B\x05\x00\x00\x00\x00\x48\x85\xC0\x74\x05\x48\x8B\x40\x58\xC3\xC3";
 const char* GAMEDATAMAN_MASK = "xxx????xxxxxxxxxxx";
@@ -13,8 +51,8 @@ struct Offsets {
     static const uintptr_t DeathCount = 0x94;
 };
 
-int GetRandomInt(random_state* state, int min, int max) {
-    return min + (random_next(state) % (max - min + 1));
+int GetRandomInt(xoshiro256ss_state* state, int min, int max) {
+    return min + (int)(next(state) % (max - min + 1));
 }
 
 uintptr_t FindPattern(const char* pattern, const char* mask) {
@@ -41,9 +79,10 @@ uintptr_t GetRIPRelative(uintptr_t address) {
     return address + offset + 7;
 }
 
-void RandomizeStatsAndLevel(uintptr_t gameDataManAddr, random_state* rng) {
+void RandomizeStatsAndLevel(uintptr_t gameDataManAddr, xoshiro256ss_state* rng) {
     uintptr_t gameDataMan = *(uintptr_t*)gameDataManAddr;
     if (!gameDataMan) return;
+
     uintptr_t statBase = *(uintptr_t*)(gameDataMan + Offsets::StatBasePtr);
     if (!statBase) return;
 
@@ -60,9 +99,9 @@ void ModThread() {
 
     uintptr_t gameDataManAddr = GetRIPRelative(gameDataManInst);
     int lastDeathCount = -1;
-
-    random_state rng;
-    random_autoseed(&rng);
+    xoshiro256ss_state rng;
+    uint64_t timeSeed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    seed_rng(&rng, timeSeed);
 
     while (true) {
         uintptr_t gameDataMan = *(uintptr_t*)gameDataManAddr;
@@ -87,6 +126,7 @@ void ModThread() {
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
+        DisableThreadLibraryCalls(hModule);
         CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)ModThread, nullptr, 0, nullptr);
     }
     return TRUE;
