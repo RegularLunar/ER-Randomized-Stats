@@ -1,11 +1,11 @@
 # Elden Ring Attribute Randomizer
 > A lightweight C++ DLL middleware for Elden Ring that monitors player death events to inject randomized attributes and character levels.
 
-![Release](https://img.shields.io/github/v/release/RegularLunar/ER-Randomized-Stats?style=for-the-badge) 
-[![License](https://img.shields.io/badge/License-ARR-10b981?style=for-the-badge)](LICENSE)
-![Stars](https://img.shields.io/github/stars/RegularLunar/ER-Randomized-Stats?style=for-the-badge) 
-[![Downloads](https://img.shields.io/github/downloads/RegularLunar/ER-Randomized-Stats/total?style=for-the-badge&color=0ea5e9&label=Downloads)](https://github.com/RegularLunar/ER-Randomized-Stats/releases) 
-[![Last Commit](https://img.shields.io/github/last-commit/RegularLunar/ER-Randomized-Stats?style=for-the-badge&color=6366f1)](https://github.com/RegularLunar/ER-Randomized-Stats/commits)
+![Release](https://img.shields.io/github/v/release/RegularLunar/ER-Randomized-Stats?style=for-the-badge&color=916cd9) 
+![License](https://img.shields.io/badge/License-ARR-10b981?style=for-the-badge)
+![Stars](https://img.shields.io/github/stars/RegularLunar/ER-Randomized-Stats?style=for-the-badge&color=f59e0b)
+![Downloads](https://img.shields.io/github/downloads/RegularLunar/ER-Randomized-Stats/total?style=for-the-badge&color=0ea5e9&label=Downloads)
+![Last Commit](https://img.shields.io/github/last-commit/RegularLunar/ER-Randomized-Stats?style=for-the-badge&color=6366f1)
 
 ---
 
