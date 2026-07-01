@@ -9,10 +9,11 @@
 
 ---
 
-## Warning
-- **Do not use this mod while playing online.** Elden Ring utilizes Easy Anti-Cheat (EAC). Modifying memory while connected to FromSoftware's servers will result in an account ban. Always play in **Offline Mode** with EAC disabled via Mod Engine 2 or a similar launcher. 
-- **I am not responsible for any harm to your account. You have been warned.**
-- **BACK UP YOUR SAVES!** This mod **permanently** alters your attributes.
+> [!CAUTION]
+> **Do not use this mod while playing online.** Elden Ring utilizes Easy Anti-Cheat (EAC). Modifying memory while connected to FromSoftware's servers will result in an account ban. Always play in **Offline Mode** with EAC disabled via [Mod Engine](https://github.com/garyttierney/me3) or a similar launcher. **I am not responsible for any harm to your account. You have been warned.**
+
+> [!IMPORTANT]
+>  **PLEASE BACK UP YOUR SAVES!** This mod **permanently** alters your attributes.
 
 ### Features
 - **Death Trigger:** Stats and Level re-roll 2s after every death.
